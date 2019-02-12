@@ -28,7 +28,8 @@ export type Padding = keyof typeof Tailwind.padding;
 export type Width = keyof typeof Tailwind.width;
 export type Height = keyof typeof Tailwind.height;
 
-export type FlexAlign = "stretch" | "start" | "center" | "end" | "baseline";
+export type FlexAlignItems = "stretch" | "start" | "center" | "end" | "baseline";
+export type FlexJustify = "start" | "center" | "end" | "between" | "around";
 export type FlexItem = "initial" | "1" | "auto" | "none" | "grow" | "shrink" | "no-grow" | "no-shrink";
 
 export type Rounded = ExcludeDefault<keyof typeof Tailwind.borderRadius>;
@@ -41,3 +42,7 @@ export type SVGFill = keyof typeof Tailwind.svgFill;
 export type SVGStroke = keyof typeof Tailwind.svgStroke;
 
 export type Opacity = keyof typeof Tailwind.opacity;
+
+export type Shadow = keyof typeof Tailwind.shadows;
+
+export type Cursor = "auto" | "default" | "pointer" | "wait" | "move" | "not-allowed";

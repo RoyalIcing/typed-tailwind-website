@@ -1,13 +1,13 @@
 import React from "react";
 import { ctss as c, sm, lg, bg, border, text, font, leading, mx, my, px, py, w, h, rounded, display, relative, absolute, fill, items, flexItem, textStyle, opacity } from "../tailwind/functions";
 
-export default function AlertPage() {
+export default function AlertsPage() {
   return (
     <div className={c(py("8", null))}>
       <div className={c(my(null, "8"))}>
         <div className={c(
           bg("red-lightest"),
-          border("red-light"),
+          border(true, "red-light"),
           text("red-dark"),
           px("4"),
           py("3"),
@@ -85,7 +85,7 @@ export default function AlertPage() {
         <div className={c(
           // bg-orange-lightest border-l-4 border-orange text-orange-dark p-4
           bg("orange-lightest"),
-          border("orange", { l: "4" }),
+          border({ l: "4" }, "orange"),
           text("orange-dark"),
           px("4"),
           py("4")

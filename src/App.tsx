@@ -1,7 +1,9 @@
-import React, { Suspense, useReducer, useState, useEffect, useRef } from 'react';
+import React, { Suspense, useReducer, useState, useEffect, useRef, useCallback } from 'react';
 import './App.css';
+import { ctss as c, bg, display, text, textStyle, px, py, items, justify } from "./tailwind/functions";
 
-const AlertPage = React.lazy(() => import("./pages/Alert"));
+const AlertsPage = React.lazy(() => import("./pages/Alerts"));
+const ButtonsPage = React.lazy(() => import("./pages/Buttons"));
 
 type Section = "button" | "alert";
 type RoutePath = "/button" | "/alert";
@@ -60,31 +62,43 @@ function useURL<Path extends string>(): { path: Path, push: (path: Path) => void
   return { path, push, onLinkClick };
 }
 
+function NavLink({ href, children, onClick }: { href: RoutePath, children: React.ReactNode, onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void }): JSX.Element {
+  return (
+    <a href={href} onClick={onClick} className={c(
+      display("block"),
+      px("4"),
+      py("4"),
+      text("white"),
+      textStyle("no-underline")
+    )}>{ children }</a>
+  );
+}
+
 function App(): JSX.Element {
-  const [localState, dispatch] = useReducer(stateReducer, { section: "button" });
   const router = useURL<RoutePath>();
   const { section } =  parsePath(router.path);
 
   return (
     <div className="App">
       <nav>
-        <ul>
+        <ul className={c(bg("blue-darkest"), display("flex"), justify("center"))}>
           <li>
-            <a href="/button" onClick={router.onLinkClick}>Button</a>
+            <NavLink href="/alert" onClick={router.onLinkClick}>Alerts</NavLink>
           </li>
           <li>
-            <a href="/alert" onClick={router.onLinkClick}>Alert</a>
+            <NavLink href="/button" onClick={router.onLinkClick}>Buttons</NavLink>
           </li>
         </ul>
       </nav>
-      <main className="max-w-lg mx-auto px-3">
+      <main className="max-w-lg mx-auto px-3 py-8">
         <Suspense fallback={<p>Loading…</p>}>
           {section === "button" && <>
-            <h1>Button</h1>
+            <h1>Buttons</h1>
+            <ButtonsPage />
           </>}
           {section === "alert" && <>
-            <h1>Alert</h1>
-            <AlertPage />
+            <h1>Alerts</h1>
+            <AlertsPage />
           </>}
         </Suspense>
       </main>

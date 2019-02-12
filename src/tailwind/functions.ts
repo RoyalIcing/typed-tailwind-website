@@ -1,5 +1,5 @@
 import { addPrefixToMany } from "@ctss/core";
-import { BackgroundColor, BorderWidth, BorderStyle, BorderColor, TextSize, TextColor, TextAlign, FontWeight, Leading, Margin, Padding, Width, Height, Rounded, Display, Pin, SVGFill, SVGStroke, FlexAlign, FlexItem, FontStyle, TextTransform, TextDecoration, FontSmoothing, Opacity } from "./types";
+import { BackgroundColor, BorderWidth, BorderStyle, BorderColor, TextSize, TextColor, TextAlign, FontWeight, Leading, Margin, Padding, Width, Height, Rounded, Display, Pin, SVGFill, SVGStroke, FlexAlignItems, FlexJustify, FlexItem, FontStyle, TextTransform, TextDecoration, FontSmoothing, Opacity, Cursor, Shadow } from "./types";
 
 export { ctss } from "@ctss/core";
 
@@ -110,8 +110,12 @@ export function h(suffix: Height): Array<Base> {
   return [`h-${suffix}`] as Array<Base>;
 }
 
-export function items(suffix: FlexAlign): Array<Base> {
+export function items(suffix: FlexAlignItems): Array<Base> {
   return [`items-${suffix}`] as Array<Base>;
+}
+
+export function justify(suffix: FlexJustify): Array<Base> {
+  return [`justify-${suffix}`] as Array<Base>;
 }
 
 export function flexItem(...suffixes: Array<FlexItem>): Array<Base> {
@@ -134,26 +138,46 @@ export function textStyle(...suffixes: Array<FontStyle | TextTransform | TextDec
   return suffixes as Array<Base>;
 }
 
-type BoxSide = "t" | "r" | "b" | "l";
-function applyPrefixToSides<T>(sides: Partial<Record<BoxSide, BorderWidth>>, prefix: string): Array<string> {
+type BorderSide = "t" | "r" | "b" | "l";
+function borderSides(sides: Partial<Record<BorderSide, BorderWidth | true>>): Array<Base | false> {
   return [
-    sides.t != null && `${prefix}t-${sides.t}`,
-    sides.r != null && `${prefix}r-${sides.r}`,
-    sides.b != null && `${prefix}b-${sides.b}`,
-    sides.l != null && `${prefix}l-${sides.l}`,
-  ].filter(Boolean) as Array<string>;
+    sides.t != null && (sides.t === true ? `border-t` : `border-t-${sides.t}`),
+    sides.r != null && (sides.r === true ? `border-r` : `border-r-${sides.r}`),
+    sides.b != null && (sides.b === true ? `border-b` : `border-b-${sides.b}`),
+    sides.l != null && (sides.l === true ? `border-l` : `border-l-${sides.l}`),
+  ] as Array<Base | false>;
 }
 
-export function border(color?: BorderColor, width?: BorderWidth | Partial<Record<BoxSide, BorderWidth>>, style?: BorderStyle): Array<Base> {
+export function border(width: BorderWidth | true | null | Partial<Record<BorderSide, BorderWidth | true>>, color?: BorderColor, style?: BorderStyle): Array<Base> {
   return [
-    ...(width != null ? (typeof width === "string" ? [`border-${width}`] : applyPrefixToSides(width as Partial<Record<BoxSide, BorderWidth>>, "border-")) : ["border"]),
+    ...(width !== null ? (width === true ? ["border"] : typeof width === "string" ? [`border-${width}`] : borderSides(width as Partial<Record<BorderSide, BorderWidth | true>>)) : []),
     color != null && `border-${color}`,
     style != null && `border-${style}`
   ].filter(Boolean) as Array<Base>;
 }
 
-export function rounded(suffix?: Rounded): Array<Base> {
-  return (suffix ? [`rounded-${suffix}`] : ["rounded"]) as Array<Base>;
+type RoundedSide = "t" | "r" | "b" | "l";
+type RoundedCorner = "tl" | "tr" | "br" | "bl";
+function roundedSidesOrCorners(sidesOrCorners: Partial<Record<RoundedSide | RoundedCorner, Rounded | true>>): Array<Base> {
+  return [
+    sidesOrCorners.t != null && (sidesOrCorners.t === true ? `rounded-t` : `rounded-t-${sidesOrCorners.t}`),
+    sidesOrCorners.r != null && (sidesOrCorners.r === true ? `rounded-r` : `rounded-r-${sidesOrCorners.r}`),
+    sidesOrCorners.b != null && (sidesOrCorners.b === true ? `rounded-b` : `rounded-b-${sidesOrCorners.b}`),
+    sidesOrCorners.l != null && (sidesOrCorners.l === true ? `rounded-l` : `rounded-l-${sidesOrCorners.l}`),
+    sidesOrCorners.tl != null && (sidesOrCorners.tl === true ? `rounded-tl` : `rounded-tl-${sidesOrCorners.tl}`),
+    sidesOrCorners.tr != null && (sidesOrCorners.tr === true ? `rounded-tr` : `rounded-tr-${sidesOrCorners.tr}`),
+    sidesOrCorners.br != null && (sidesOrCorners.br === true ? `rounded-br` : `rounded-br-${sidesOrCorners.br}`),
+    sidesOrCorners.bl != null && (sidesOrCorners.bl === true ? `rounded-bl` : `rounded-bl-${sidesOrCorners.bl}`),
+  ].filter(Boolean) as Array<Base>;
+}
+export function rounded(value?: Rounded | Partial<Record<RoundedSide | RoundedCorner, Rounded | true>>): Array<Base> {
+  if (value === undefined) {
+    return ["rounded"] as Array<Base>;
+  } else if (typeof value === "string") {
+    return [`rounded-${value}`] as Array<Base>;
+  } else {
+    return roundedSidesOrCorners(value as Partial<Record<RoundedSide | RoundedCorner, Rounded | true>>);
+  }
 }
 
 export function display(name: Display): Array<Base> {
@@ -178,4 +202,12 @@ export function stroke(name: SVGStroke): Array<Base> {
 
 export function opacity(suffix: Opacity): Array<Base> {
   return [`opacity-${suffix}`] as Array<Base>;
+}
+
+export function shadow(suffix?: Shadow): Array<Base> {
+  return (suffix ? [`shadow-${suffix}`] : ["shadow"]) as Array<Base>;
+}
+
+export function cursor(suffix: Cursor): Array<Base> {
+  return [`cursor-${suffix}`] as Array<Base>;
 }
