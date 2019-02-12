@@ -1,3 +1,31 @@
+
+
+---
+
+```
+File sizes after gzip:
+
+  36.7 KB  build/static/js/2.75f6d835.chunk.js
+  1.15 KB  build/static/js/runtime~main.80d92a65.js
+  923 B    build/static/js/main.cbcd4826.chunk.js
+  885 B    build/static/js/1.6f9dd33e.chunk.js
+  275 B    build/static/css/main.7b84befa.chunk.css
+```
+
+---
+
+```
+File sizes after gzip:
+
+  36.7 KB  build/static/js/2.75f6d835.chunk.js
+  1.15 KB  build/static/js/runtime~main.80d92a65.js
+  923 B    build/static/js/main.cbcd4826.chunk.js
+  885 B    build/static/js/1.6f9dd33e.chunk.js
+  275 B    build/static/css/main.7b84befa.chunk.css
+```
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
