@@ -3,24 +3,11 @@ import { BackgroundColor, BorderWidth, BorderStyle, BorderColor, TextSize, TextC
 
 export { ctss } from "@ctss/core";
 
-export type CanHover = string & {
-  startsWith(searchString: "hover:"): false;
-};
-export type CanFocus = string & {
-  startsWith(searchString: "focus:"): false;
-};
-export type CanActive = string & {
-  startsWith(searchString: "active:"): false;
-};
-export type Breakpointable = string & {
-  startsWith(searchString: "sm:" | "md:" | "lg:" | "xl:"): false;
-};
-export type Base = CanHover & CanFocus & CanActive & Breakpointable;
-
-
-function make(...strings: Array<string>): Array<Base> {
-  return strings as Array<Base>;
-}
+// Breakpoint prefixes
+// sm:
+// md:
+// lg:
+// xl:
 
 export function sm(...arrayOfSuffixes: Array<Array<Breakpointable>>): Array<string> {
   return addPrefixToMany(arrayOfSuffixes as Array<Array<string>>, "sm:");
@@ -38,6 +25,11 @@ export function xl(...arrayOfSuffixes: Array<Array<Breakpointable>>): Array<stri
   return addPrefixToMany(arrayOfSuffixes as Array<Array<string>>, "xl:");
 }
 
+// Pseudo class prefixes
+// hover:
+// focus:
+// active:
+
 export function hover(...arrayOfSuffixes: Array<Array<CanHover>>): Array<Breakpointable> {
   return addPrefixToMany(arrayOfSuffixes as Array<Array<string>>, "hover:") as Array<Breakpointable>;
 }
@@ -50,57 +42,67 @@ export function active(...arrayOfSuffixes: Array<Array<CanActive>>): Array<Break
   return addPrefixToMany(arrayOfSuffixes as Array<Array<string>>, "active:") as Array<Breakpointable>;
 }
 
+// Background
+
 export function bg(suffix: BackgroundColor): Array<Base> {
   return make("bg-" + suffix);
 }
 
-export function mx(leftOrBoth: Margin | null, right?: Margin | null): Array<Base> {
+// Margin
+
+type NegativePrefix = "-" | "";
+
+export function mx(leftOrBoth: Margin | null, right?: Margin | null, negative: NegativePrefix = ""): Array<Base> {
   if (leftOrBoth == null) {
-    return make(`mr-${right}`);
+    return make(`${negative}mr-${right}`);
   } else if (right === null) {
-    return make(`ml-${leftOrBoth}`);
+    return make(`${negative}ml-${leftOrBoth}`);
   } else if (right === undefined) {
-    return make(`mx-${leftOrBoth}`);
+    return make(`${negative}mx-${leftOrBoth}`);
   } else {
-    return make(`ml-${leftOrBoth}`, `mr-${right}`);
+    return make(`${negative}ml-${leftOrBoth}`, `${negative}mr-${right}`);
   }
 }
 
-export function my(topOrBoth: Margin | null, bottom?: Margin | null): Array<Base> {
+export function my(topOrBoth: Margin | null, bottom?: Margin | null, negative: NegativePrefix = ""): Array<Base> {
   if (topOrBoth === null) {
-    return make(`mb-${bottom}`);
+    return make(`${negative}mb-${bottom}`);
   } else if (bottom === null) {
-    return make(`mt-${topOrBoth}`);
+    return make(`${negative}mt-${topOrBoth}`);
   } else if (bottom === undefined) {
-    return make(`my-${topOrBoth}`);
+    return make(`${negative}my-${topOrBoth}`);
   } else {
-    return make(`mt-${topOrBoth}`, `mb-${bottom}`);
+    return make(`${negative}mt-${topOrBoth}`, `${negative}mb-${bottom}`);
   }
 }
 
-export function px(leftOrBoth: Padding | null, right?: Padding | null): Array<Base> {
+// Padding
+
+export function px(leftOrBoth: Padding | null, right?: Padding | null, negative: NegativePrefix = ""): Array<Base> {
   if (leftOrBoth === null) {
-    return make(`pr-${right}`);
+    return make(`${negative}pr-${right}`);
   } else if (right === null) {
-    return make(`pl-${leftOrBoth}`);
+    return make(`${negative}pl-${leftOrBoth}`);
   } else if (right === undefined) {
-    return make(`px-${leftOrBoth}`);
+    return make(`${negative}px-${leftOrBoth}`);
   } else {
-    return make(`pl-${leftOrBoth}`, `pr-${right}`);
+    return make(`${negative}pl-${leftOrBoth}`, `${negative}pr-${right}`);
   }
 }
 
-export function py(topOrBoth: Padding | null, bottom?: Padding | null): Array<Base> {
+export function py(topOrBoth: Padding | null, bottom?: Padding | null, negative: NegativePrefix = ""): Array<Base> {
   if (topOrBoth === null) {
-    return make(`pb-${bottom}`);
+    return make(`${negative}pb-${bottom}`);
   } else if (bottom === null) {
-    return make(`pt-${topOrBoth}`);
+    return make(`${negative}pt-${topOrBoth}`);
   } else if (bottom === undefined) {
-    return make(`py-${topOrBoth}`);
+    return make(`${negative}py-${topOrBoth}`);
   } else {
-    return make(`pt-${topOrBoth}`, `pb-${bottom}`);
+    return make(`${negative}pt-${topOrBoth}`, `${negative}pb-${bottom}`);
   }
 }
+
+// Sizing: width & height
 
 export function w(suffix: Width): Array<Base> {
   return [`w-${suffix}`] as Array<Base>;
@@ -109,6 +111,8 @@ export function w(suffix: Width): Array<Base> {
 export function h(suffix: Height): Array<Base> {
   return [`h-${suffix}`] as Array<Base>;
 }
+
+// Flex box
 
 export function items(suffix: FlexAlignItems): Array<Base> {
   return [`items-${suffix}`] as Array<Base>;
@@ -121,6 +125,8 @@ export function justify(suffix: FlexJustify): Array<Base> {
 export function flexItem(...suffixes: Array<FlexItem>): Array<Base> {
   return suffixes.map(suffix => `flex-${suffix}` as Base);
 }
+
+// Text & fonts
 
 export function text(...suffixes: Array<TextSize | TextColor | TextAlign>): Array<Base> {
   return suffixes.map(suffix => `text-${suffix}` as Base);
@@ -137,6 +143,8 @@ export function leading(suffix: Leading): Array<Base> {
 export function textStyle(...suffixes: Array<FontStyle | TextTransform | TextDecoration | FontSmoothing>): Array<Base> {
   return suffixes as Array<Base>;
 }
+
+// Border
 
 type BorderSide = "t" | "r" | "b" | "l";
 function borderSides(sides: Partial<Record<BorderSide, BorderWidth | true>>): Array<Base | false> {
@@ -155,6 +163,8 @@ export function border(width: BorderWidth | true | null | Partial<Record<BorderS
     style != null && `border-${style}`
   ].filter(Boolean) as Array<Base>;
 }
+
+// Rounded border radius
 
 type RoundedSide = "t" | "r" | "b" | "l";
 type RoundedCorner = "tl" | "tr" | "br" | "bl";
@@ -180,6 +190,8 @@ export function rounded(value?: Rounded | Partial<Record<RoundedSide | RoundedCo
   }
 }
 
+// Block level CSS
+
 export function display(name: Display): Array<Base> {
   return [name] as Array<Base>;
 }
@@ -192,6 +204,8 @@ export function absolute(...pins: Array<Pin>): Array<Base> {
   return ["absolute"].concat(pins) as Array<Base>;
 }
 
+// SVG
+
 export function fill(name: SVGFill): Array<Base> {
   return [name] as Array<Base>;
 }
@@ -200,14 +214,48 @@ export function stroke(name: SVGStroke): Array<Base> {
   return [name] as Array<Base>;
 }
 
+// Opacity
+
 export function opacity(suffix: Opacity): Array<Base> {
   return [`opacity-${suffix}`] as Array<Base>;
 }
+
+// Box shadow
 
 export function shadow(suffix?: Shadow): Array<Base> {
   return (suffix ? [`shadow-${suffix}`] : ["shadow"]) as Array<Base>;
 }
 
+// Cursor
+
 export function cursor(suffix: Cursor): Array<Base> {
   return [`cursor-${suffix}`] as Array<Base>;
+}
+
+// Reset class for <ul> & <ol>
+
+export function listReset(): Array<Base> {
+  return ["list-reset"] as Array<Base>;
+}
+
+// Types that enable safe composition
+
+export type CanHover = string & {
+  startsWith(searchString: "hover:"): false;
+};
+export type CanFocus = string & {
+  startsWith(searchString: "focus:"): false;
+};
+export type CanActive = string & {
+  startsWith(searchString: "active:"): false;
+};
+export type Breakpointable = string & {
+  startsWith(searchString: "sm:" | "md:" | "lg:" | "xl:"): false;
+};
+export type Base = CanHover & CanFocus & CanActive & Breakpointable;
+
+// Private convenience function
+
+function make(...strings: Array<string>): Array<Base> {
+  return strings as Array<Base>;
 }

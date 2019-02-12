@@ -1,6 +1,9 @@
+// Import the actual tailwind.js config
 import Tailwind from "../tailwind";
 
 type ExcludeDefault<T> = Exclude<T, "default">
+
+// Generate types for all Tailwind classes, based on the entered values
 
 export type BackgroundColor = keyof typeof Tailwind.backgroundColors;
 
