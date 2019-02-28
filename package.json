@@ -13,7 +13,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npm run build:react && npm run build:config",
+    "build:react": "react-scripts build",
+    "build:config": "cp src/netlify.toml build/netlify.toml",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
