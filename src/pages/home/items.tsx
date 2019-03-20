@@ -17,20 +17,22 @@ export default [
     <h2 className={c(text("center", "3xl"), leading("loose"))}>Benefits</h2>
     <ul className={c(text("lg"), leading("loose"))}>
       <li>
-        Get autocompletion for everything in Tailwind, including your custom
-        colors and everything.
+        <strong>Great developer experience:</strong> Get autocompletion for your
+        custom colors, font sizes, and everything in Tailwind.
       </li>
       <li>
-        Get type-checking of all your Tailwind names — typos are compile-time
-        errors.
+        <strong>Goodbye typos:</strong> Never misspell a class name again:
+        type-checking means typos are compile-time errors.
       </li>
+      <li><strong>Simple server rendering:</strong> Zero config server rendering — it’s just static CSS!</li>
       <li>
-        Use media-query-based breakpoints and <code>:hover</code>,{" "}
+        <strong>Fast: </strong>Use media-query-based breakpoints and <code>:hover</code>,{" "}
         <code>:focus</code>, <code>:active</code> pseudo classes — purely with
         CSS.
       </li>
       <li>
-        No{" "}
+        <strong>Secure:</strong>
+        {" No "}
         <a href="https://frontarm.com/james-k-nelson/how-can-i-use-css-in-js-securely/">
           CSS-in-JS injection attacks.
         </a>
